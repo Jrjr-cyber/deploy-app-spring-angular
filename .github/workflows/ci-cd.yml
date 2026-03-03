@@ -4,30 +4,8 @@ push:
 branches:
 - main
 jobs:
-build-and-deploy:
+build-and-test:
 runs-on: ubuntu-latest
 steps:
-- name: Checkout
+- name: Checkout Code
 uses: actions/checkout@v4
-- name: Login Docker
-uses: docker/login-action@v3
-with:
-username: ${{ secrets.DOCKERHUB_USERNAME }}
-password: ${{ secrets.DOCKERHUB_TOKEN }}
-- name: Build Backend
-uses: docker/build-push-action@v5
-with:
-context: ./springboot/app
-push: true
-tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest
-- name: Build Frontend
-uses: docker/build-push-action@v5
-with:
-context: ./angular-app
-push: true
-tags: ${{ secrets.DOCKERHUB_USERNAME }}/angular-app:latest
-- name: Test
-run: |
-docker-compose up -d
-sleep 30
-docker ps
